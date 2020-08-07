@@ -6,6 +6,9 @@
   background-color: #428ffb;
   box-sizing: border-box;
   color: white; }
+  #header-block #heading a {
+    text-decoration: none;
+    color: white; }
   #header-block #profile-container {
     display: flex;
     justify-content: space-between;

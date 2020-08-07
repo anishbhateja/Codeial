@@ -2,9 +2,30 @@ const User = require("../models/user");
 
 module.exports.profile = function (req, res) {
   //exporting the action home controller
-  return res.render("user_profile", {
-    title: "Profile Page",
+  let user_id = req.params.id;
+  User.findById(user_id, function (err, user) {
+    if (user) {
+      return res.render("user_profile", {
+        title: "Profile Page",
+        profile_user: user,
+      });
+    } else {
+      console.log("error in finding user");
+      return res.redirect("back");
+    }
   });
+};
+
+module.exports.update = function (req, res) {
+  if (req.user.id == req.params.id) {
+    let user_id = req.params.id;
+    //UPDATE FUNCTION
+    User.findByIdAndUpdate(user_id, req.body, function (err, user) {
+      return res.redirect("back");
+    });
+  } else {
+    res.status(401).send("Unauthorized");
+  }
 };
 
 module.exports.signUp = function (req, res) {

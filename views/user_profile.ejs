@@ -1,6 +1,31 @@
 <link rel="stylesheet" href="/css/user_profile.css" />
 
-<h1>Codeial / Profile Page</h1>
+<h1><%=profile_user.name %></h1>
 
-<p><%=locals.user.name%></p>
-<p><%=locals.user.email%></p>
+<% if(locals.user.id==profile_user.id) {%>
+<!-- If user matches, only show the form  -->
+<form action="/users/update/<%=profile_user.id %>" method="POST">
+  <input
+    type="text"
+    name="name"
+    value="<%=profile_user.name %>"
+    placeholder="Update Name..."
+    required
+  />
+  <input
+    type="email"
+    name="email"
+    value="<%=profile_user.email%>"
+    placeholder="Update Email....."
+    required
+  />
+  <input type="submit" value="Update" name="Update" />
+</form>
+
+<% }else{ %>
+<!-- If user doesn't match, show profile information  -->
+
+<p><%=profile_user.name%></p>
+<p><%=profile_user.email%></p>
+
+<%}%>

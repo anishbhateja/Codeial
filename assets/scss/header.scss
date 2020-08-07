@@ -1,4 +1,9 @@
 #header-block {
+  #heading a {
+    text-decoration: none;
+    color: white;
+  }
+
   display: flex;
   justify-content: space-between;
   height: 80px;
