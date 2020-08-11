@@ -12,6 +12,7 @@ module.exports.create = async function (req, res) {
         user: req.user._id,
       });
 
+      req.flash("success", "Comment Posted");
       post.comments.push(comment); //pushing into the array of post(key:comments)
       post.save();
       return res.redirect("/");
@@ -19,7 +20,7 @@ module.exports.create = async function (req, res) {
       return res.redirect("/");
     }
   } catch (err) {
-    console.log("Error", err);
+    req.flash("error", err);
     return;
   }
 };
@@ -35,6 +36,7 @@ module.exports.destroy = async function (req, res) {
       await Post.findByIdAndUpdate(postId, {
         $pull: { comments: req.params.id },
       });
+      req.flash("success", "Comment deleted !");
 
       return res.redirect("back");
 
@@ -43,7 +45,7 @@ module.exports.destroy = async function (req, res) {
       return res.redirect("back");
     }
   } catch (err) {
-    console.log("Error", err);
+    req.flash("error", err);
     return;
   }
 };

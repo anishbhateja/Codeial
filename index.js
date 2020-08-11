@@ -9,8 +9,10 @@ const db = require("./config/mongoose");
 const session = require("express-session");
 const passport = require("passport");
 const passportLocal = require("./config/passport-local-strategy");
-const MongoStore = require("connect-mongo")(session); //evertime server is restarted,session cookies are removed,hence we need a way to store them
+const MongoStore = require("connect-mongo")(session); //everytime server is restarted,session cookies are removed,hence we need a way to store them
 const sassMiddleware = require("node-sass-middleware");
+const flash = require("connect-flash");
+const customMware = require("./config/middleware");
 
 app.use(
   sassMiddleware({
@@ -62,7 +64,11 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.use(passport.setAuthenticatedUser);
+
+app.use(flash()); //has to be placed after session as it uses session cookies.
+app.use(customMware.setFlash);
 
 // use express router
 app.use("/", require("./routes"));

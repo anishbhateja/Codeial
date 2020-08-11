@@ -3,23 +3,25 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
 const User = require("../models/user");
+const { setFlash } = require("./middleware");
 
 //authentication using passport
 passport.use(
   new LocalStrategy(
     {
       usernameField: "email", //this means that user will be found user 'email' in the user schema
+      passReqToCallback: true, //this allows "req" to be a part of the callback function
     }, //whenever passport is being called --> email & password will be sent along
-    function (email, password, done) {
+    function (req, email, password, done) {
       //done is a callback function which is reporting back to passportJs
       //find a user and establish identity
       User.findOne({ email: email }, function (err, user) {
         if (err) {
-          console.log("Error in finding user--> Passport");
+          req.flash("error", err);
           return done(err);
         }
         if (!user || user.password != password) {
-          console.log("Invalid Username/Password");
+          req.flash("error", "Invalid Username/Password");
           return done(null, false); //no error but authetication failed
         }
         return done(null, user); //no error, user found and being returned, go for serializing
