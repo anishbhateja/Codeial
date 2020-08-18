@@ -64,7 +64,6 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use(passport.setAuthenticatedUser);
 
 app.use(flash()); //has to be placed after session as it uses session cookies.
