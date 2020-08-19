@@ -74,7 +74,7 @@
 
   let convertPostsToAjax = function () {
     $("#post-list-container>ul>li").each(function (index, value) {
-      let self = $(this); //this in jQuery corresponds to the value
+      let self = $(this); //this in jQuery corresponds to the value of index
       let deleteButton = $(" .delete-post-button", self);
       deletePost(deleteButton);
 

@@ -28,6 +28,7 @@ app.use(express.urlencoded());
 app.use(cookieParser());
 
 app.use(express.static("./assets"));
+app.use("/uploads", express.static(__dirname + "/uploads")); //make the upload path available to the browser
 
 app.use(expressLayouts); //needs to called before routes, as after routes->controller->view, it should be declared earlier itself that layout has to be used.contacts
 

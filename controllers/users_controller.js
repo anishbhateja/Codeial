@@ -1,4 +1,6 @@
 const User = require("../models/user");
+const fs = require("fs");
+const path = require("path");
 
 module.exports.profile = function (req, res) {
   //exporting the action home controller
@@ -16,14 +18,39 @@ module.exports.profile = function (req, res) {
   });
 };
 
-module.exports.update = function (req, res) {
+module.exports.update = async function (req, res) {
   if (req.user.id == req.params.id) {
-    let user_id = req.params.id;
-    //UPDATE FUNCTION
-    User.findByIdAndUpdate(user_id, req.body, function (err, user) {
+    try {
+      //UPDATE FUNCTION
+      let user = await User.findById(req.params.id);
+      User.uploadedAvatar(req, res, function (err) {
+        if (err) {
+          console.log("*****Multer Error", err);
+        }
+
+        user.name = req.body.name; //wouldn't have been able to read the body if not passed through above fun, since it's a multipart form
+        user.email = req.body.email;
+        if (req.file) {
+          if (user.avatar) {
+            if (fs.existsSync(path.join(__dirname, "..", user.avatar))) {
+              //checks if the path exists
+              //if path exists, in that case delete exixting avatar
+              fs.unlinkSync(path.join(__dirname, "..", user.avatar));
+            }
+          }
+
+          //this is saving the path of uploaded file in the avatar field in user.
+          user.avatar = User.avatarPath + "/" + req.file.filename;
+        }
+        user.save();
+        return res.redirect("back");
+      });
+    } catch {
+      req.flash("error", err);
       return res.redirect("back");
-    });
+    }
   } else {
+    req.flash("error", "Unauthorized!");
     res.status(401).send("Unauthorized");
   }
 };
