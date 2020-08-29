@@ -1,6 +1,6 @@
 const nodemailer = require("../config/nodemailer");
 
-exports.forgotPassword = (userDetails) => {
+module.exports.forgotPassword = function (userDetails) {
   let htmlString = nodemailer.renderTemplate(
     { userDetails: userDetails },
     "./forgot_password/forgot_password.ejs"

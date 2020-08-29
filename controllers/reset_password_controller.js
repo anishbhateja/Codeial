@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const ResetPassword = require("../models/reset_password");
+const ResetPassword = require("../models/password");
 const crypto = require("crypto");
 const passwordMailer = require("../mailers/password_mailer");
 const queue = require("../config/kue");
